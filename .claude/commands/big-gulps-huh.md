@@ -736,35 +736,33 @@ Write each skill to `.claude/commands/` as a standalone markdown file with YAML 
 
 ### Skills to Write
 
-Write these 9 skills exactly as defined in the template files. Each skill is a complete markdown file with YAML frontmatter (name, description, model-hint) followed by the full skill instructions.
+Copy these 9 skills from the big-gulps-huh repo's template directory. Read each file and write it verbatim into the target project's `.claude/commands/`.
 
-1. **health.md** — Project health dashboard. Model hint: haiku. 6 parallel checks (types, tests, deps, TODOs, large files, stats). Auto-detect commands from project files. Report card with grades.
+**Source directory:** Find the big-gulps-huh repo by locating where THIS skill file lives, then navigate to `template/.claude/commands/` relative to the repo root. For example, if this skill is at `/path/to/big-gulps-huh/.claude/commands/big-gulps-huh.md`, the templates are at `/path/to/big-gulps-huh/template/.claude/commands/`.
 
-2. **preflight.md** — Pre-push gate. Model hint: haiku. 5 sequential checks. Types and tests are BLOCKING. Debug, lint, large files are WARNING. Verdict: CLEAR TO PUSH or BLOCKED.
+1. **health.md** — Project health dashboard
+2. **preflight.md** — Pre-push gate
+3. **code-review.md** — Multi-agent code review
+4. **deep-review.md** — 5-agent deep review
+5. **retro.md** — Post-session retrospective
+6. **future-feature.md** — Feature backlog manager
+7. **ready-to-commit.md** — Smart commit prep
+8. **learn.md** — Interactive tutor with course pack engine
+9. **vibes.md** — Positive mindset priming
 
-3. **code-review.md** — Multi-agent code review. Model hint: sonnet. Routes by file count: 1-3 files = single pass, 4+ files = 3 parallel agents (Architecture+Security, Correctness+Performance, Quality+DX). Verdict: APPROVED / NEEDS CHANGES / BLOCKED.
-
-4. **deep-review.md** — 5-agent deep review. Model hint: sonnet. For significant changes. 5 parallel agents: Architecture, Security, Performance, Correctness, DX. Deduplicate and assign severity.
-
-5. **retro.md** — Post-session retrospective. Model hint: sonnet. 4 parallel agents: Lessons Learned, Skills Auditor, CLAUDE.md Freshness, Workflow Efficiency. Auto-detect scope. Trend analysis. Retro log.
-
-6. **future-feature.md** — Feature backlog manager. Model hint: sonnet. Scan sources, extract features, deduplicate, tier (T1-T4), write backlog, optional build plan.
-
-7. **ready-to-commit.md** — Smart commit prep. Model hint: sonnet. Detect changes, categorize files, route by scope (small/medium/large), chain review + preflight, stage + commit.
-
-8. **learn.md** — Interactive tutor with course pack engine. Model hint: opus. Discovers courses from docs/courses/, shows built-in courses + dynamic project topics. Mentor personalities (Professor/Practitioner/Philosopher). Predict-then-reveal teaching. Progress tracking. Quiz mode. Contribute command for creating new courses.
-
-9. **vibes.md** — Positive mindset priming. No model hint. 10-step flow: streak tracking, breathing, random content categories, web search, interactive presentation, wins, growth questions, rotating focus frameworks, journal, closing energy. Under 5 minutes.
+Read each template file, then write it to the target project. Do NOT paraphrase or summarize — copy the full content.
 
 ### Course Packs to Scaffold
 
-Create 3 course pack directories under `docs/courses/` with their `course.md` files:
+Copy 3 course packs from the big-gulps-huh repo's template directory. Read each file and write it verbatim into the target project.
 
-1. **docs/courses/claude-code-basics/course.md** — 5 modules: What Is Claude Code, Skills, CLAUDE.md, Hooks, Working With Claude Effectively. Predict-then-reveal format throughout.
+**Source directory:** `template/docs/courses/` relative to the big-gulps-huh repo root.
 
-2. **docs/courses/terminal-basics/course.md** — 7 modules: Where Am I, Moving Around, Looking at Files, Finding Things, Creating and Moving Things, Pipes and Redirection, You Don't Need to Memorize This. Prerequisite: claude-code-basics.
+1. **docs/courses/claude-code-basics/course.md**
+2. **docs/courses/terminal-basics/course.md**
+3. **docs/courses/git-fundamentals/course.md**
 
-3. **docs/courses/git-fundamentals/course.md** — 6 modules: What Is Git, Making Changes, Branches, Pull Requests, When Things Go Wrong, The Hooks That Protect You. Prerequisite: terminal-basics.
+Read each template course file, then write it to the target project. Do NOT paraphrase or summarize — copy the full content.
 
 ### Teaching After Layer (Skills + Courses)
 
