@@ -1,5 +1,7 @@
 # big-gulps-huh
 
+> **First time here?** Read [START-HERE.md](START-HERE.md) — it walks you through everything in 10 minutes.
+
 Complete Claude Code collaboration setup. One command. Everything you need to start building safely.
 
 Built for friends, family, and anyone joining a project (or starting their own) who wants guardrails, good habits, and a learning path from day one.

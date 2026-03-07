@@ -1,7 +1,7 @@
 ---
 name: big-gulps-huh
 description: Full zero-to-hero Claude Code collaboration setup — onboarding, skills, hooks, courses, and a guide that actually explains things.
-argument: "[path|new <name>|guide|guide --tone <preset>]"
+argument: "[path|new <name>|new <name> --passcode <code>|guide|guide --tone <preset>]"
 model-hint: opus
 ---
 
@@ -17,6 +17,17 @@ model-hint: opus
 | `guide` | Just regenerate the Big Gulps Guide |
 | `guide --tone pro` | Regenerate guide in professional tone |
 | `guide --tone minimal` | Regenerate guide in minimal bullet-point tone |
+| `new <name> --passcode <code>` | Skip guided setup — trusted user fast track |
+
+## Step 0: Passcode Check
+
+If the argument includes `--passcode`, skip the experience detection entirely:
+- Set `$EXPERIENCE = experienced`
+- Skip to Step 2 (Context & Idempotency Scan)
+- No guided explanations — just scaffold everything quickly
+- At the end, show a brief summary of what was installed instead of the full landing page
+
+This is for trusted users who've been vouched for and don't need the walkthrough.
 
 ## Step 1: Experience Detection
 
