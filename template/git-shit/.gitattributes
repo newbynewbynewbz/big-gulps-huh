@@ -1,0 +1,36 @@
+# Images — binary, no text diffs
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.svg text
+
+# Fonts — always binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+
+# Lock files — don't manually merge, keep ours on conflict
+# Requires: git config merge.ours.driver true (setup.sh handles this)
+package-lock.json -diff merge=ours
+yarn.lock -diff merge=ours
+bun.lockb binary
+Cargo.lock -diff merge=ours
+pnpm-lock.yaml -diff merge=ours
+Gemfile.lock -diff merge=ours
+
+# Auto-normalize line endings
+* text=auto
+
+# Diff drivers for binary files (uncomment + install tool for meaningful diffs)
+# *.png diff=exif        # brew install exiftool; git config diff.exif.textconv exiftool
+# *.jpg diff=exif        # Shows EXIF metadata changes instead of "binary files differ"
+# *.docx diff=word       # pip install docx2txt; git config diff.word.textconv docx2txt
+
+# Exclude dev-only files from git archive / release tarballs
+.github/ export-ignore
+scripts/ export-ignore
+.claude/ export-ignore

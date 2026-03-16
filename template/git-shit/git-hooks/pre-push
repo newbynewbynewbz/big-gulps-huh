@@ -1,0 +1,32 @@
+#!/bin/bash
+# Git Shit: Pre-push hook
+# Blocks direct pushes to protected branches — forces PR workflow
+# Bypass: git push --no-verify (emergencies only)
+
+# --- Config loader ---
+_git_shit_root="$(git rev-parse --show-toplevel 2>/dev/null)"
+[ -f "$_git_shit_root/.gitshitrc" ] && . "$_git_shit_root/.gitshitrc"
+
+PROTECTED_BRANCHES="${GIT_SHIT_PROTECTED_BRANCHES:-${PROTECTED_BRANCHES:-main}}"
+
+while read local_ref local_sha remote_ref remote_sha; do
+  IFS='|' read -ra BRANCHES <<< "$PROTECTED_BRANCHES"
+  for PROTECTED in "${BRANCHES[@]}"; do
+    if [ "$remote_ref" = "refs/heads/$PROTECTED" ]; then
+      echo ""
+      echo "🛑 Direct push to $PROTECTED blocked"
+      echo ""
+      echo "  Use the PR workflow instead:"
+      echo "    1. git checkout -b feature/my-change"
+      echo "    2. git push -u origin feature/my-change"
+      echo "    3. gh pr create --fill"
+      echo "    4. gh pr merge --squash --delete-branch"
+      echo ""
+      echo "  Emergency bypass: git push --no-verify"
+      echo ""
+      exit 1
+    fi
+  done
+done
+
+exit 0
