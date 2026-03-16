@@ -34,6 +34,29 @@ When a request is ambiguous, Claude MUST ask before implementing:
 
 Never guess on architecture decisions. A 30-second question saves a 30-minute rewrite.
 
+## Model Hints Reference
+
+| Skill | Model | Reason |
+|-------|-------|--------|
+| `/health` | haiku | Simple file scanning |
+| `/preflight` | haiku | Sequential checks |
+| `/code-review` | sonnet | Multi-agent review |
+| `/deep-review` | sonnet | 5-agent analysis |
+| `/retro` | sonnet | 4-agent retrospective |
+| `/ready-to-commit` | sonnet | Skill chaining |
+| `/plan` | sonnet | Structured planning |
+| `/learn` | opus | Complex teaching |
+| `/vibes` | sonnet | Content generation |
+| `/security-check` | sonnet | Security scanning |
+| `/impact-analysis` | sonnet | Dependency analysis |
+| `/test-gen` | sonnet | Test generation |
+| `/session-log` | sonnet | Session summarization |
+| `/async-audit` | sonnet | Async pattern analysis |
+| `/validate` | sonnet | Multi-check validation |
+| `/optimize-review` | sonnet | 4-agent optimization |
+| `/achievements` | haiku | State checking |
+| `/double-double` | opus | Complex orchestration |
+
 ## Hook Reference
 
 | Hook | Type | Trigger | What It Does |
@@ -44,41 +67,48 @@ Never guess on architecture decisions. A 30-second question saves a 30-minute re
 | Async safety | Warning | PostToolUse (Edit/Write) | Warns on unguarded promises |
 | File size | Warning | PostToolUse (Edit/Write) | Warns on 500+ line files |
 | Session greeting | Info | SessionStart | Shows branch + uncommitted count |
+| Theme tokens | Warning | PostToolUse (Edit/Write) | Warns on hardcoded colors/spacing |
+| Type regression | Warning | PostToolUse (Edit/Write) | Alerts if TypeScript error count increases |
+| Related files | Warning | PostToolUse (Edit/Write) | Reminds about related files to update |
+| Session load | Info | SessionStart | Loads last session context on startup |
+| Session save | Info | Stop | Auto-saves session context when conversation ends |
+| Pre-compact save | Info | PreCompact | Saves state before context compaction |
+| Compact nudge | Info | PreToolUse (Edit/Write) | Suggests /compact after 40+ tool calls |
 
 ## Tech Stack
 
-<!-- TODO: Fill in your actual stack -->
+<!-- Replace the examples below with your actual stack. Delete rows you don't use. -->
 
 | Layer | Technology |
 |-------|-----------|
-| Language | TODO |
-| Framework | TODO |
-| Test Runner | TODO |
-| Linter | TODO |
-| Package Manager | TODO |
-| Database | TODO |
-| Hosting | TODO |
+| Language | e.g., TypeScript 5.x / Python 3.12 / JavaScript |
+| Framework | e.g., React 18 / Next.js 14 / Express / Flask |
+| Test Runner | e.g., Jest / Vitest / pytest |
+| Linter | e.g., ESLint + Prettier / Ruff |
+| Package Manager | e.g., npm / pnpm / pip |
+| Database | e.g., PostgreSQL / SQLite / Firebase / none |
+| Hosting | e.g., Vercel / Netlify / self-hosted / local only |
 
 ## Commands
 
-<!-- TODO: Fill in your actual commands -->
+<!-- Replace with your actual commands. These tell Claude how to verify its work. -->
 
 | Command | What |
 |---------|------|
-| `TODO` | Run tests |
-| `TODO` | Type check / lint |
-| `TODO` | Start dev server |
-| `TODO` | Build for production |
+| `npm test` | Run tests (e.g., `pytest`, `vitest`, `jest`) |
+| `npx tsc --noEmit` | Type check (e.g., `mypy`, `npx tsc`, `npm run lint`) |
+| `npm run dev` | Start dev server (e.g., `python manage.py runserver`) |
+| `npm run build` | Build for production (e.g., `vite build`, `next build`) |
 
 ## File Structure
 
-<!-- TODO: Map your actual project structure -->
+<!-- Map your actual project structure. This helps Claude navigate without searching. -->
 
 ```
 src/              # Source code
-  components/     # UI components
+  components/     # UI components (e.g., Button.tsx, Header.tsx)
   services/       # Business logic / API calls
-  utils/          # Shared utilities
+  utils/          # Shared utilities (e.g., formatDate.ts)
   types/          # Type definitions
 tests/            # Test files
 scripts/          # Build & check scripts
@@ -90,35 +120,48 @@ docs/             # Documentation
 
 ## Code Patterns
 
-<!-- TODO: Document your project's patterns. Examples: -->
+<!-- Document how your project does things. Claude uses these to write consistent code. -->
 
 ### Components
-<!-- How are components structured? Props interface? Styling approach? -->
-TODO
+<!-- Example: "Functional components with Props interface. Styles via Tailwind. Export named, not default." -->
+Describe your component conventions here.
 
 ### Services / API
-<!-- How do services call APIs? Error handling? Authentication? -->
-TODO
+<!-- Example: "All API calls go through services/api.ts. Errors throw AppError with user-friendly messages." -->
+Describe your API patterns here.
 
 ### State Management
-<!-- What state management solution? Store patterns? -->
-TODO
+<!-- Example: "Zustand stores, one per domain. Actions are async. Select only what you need in components." -->
+Describe your state approach here.
 
 ### Error Handling
-<!-- How are errors caught, logged, and reported? -->
-TODO
+<!-- Example: "Try/catch at service boundary. Errors logged via logger.ts. User sees toast, not raw errors." -->
+Describe your error handling here.
 
 ### Testing
-<!-- What testing patterns? Mocks? Fixtures? -->
-TODO
+<!-- Example: "Jest + React Testing Library. Mock external services. Test behavior, not implementation." -->
+Describe your testing patterns here.
 
 ## Common Gotchas
 
 - `.env` files are protected — edit manually, never through Claude
 - Commits over 200 lines trigger a warning — split if possible
 - Direct pushes to main are blocked — use PR workflow
+- Secret scanning blocks commits containing AWS keys, private keys, or API tokens
+- Git hooks live in `scripts/git-hooks/` (not `.git/hooks/`) — they auto-update on `git pull`
+- Config in `.gitshitrc` — change `COMMIT_MSG_MODE`, `SECRET_SCAN`, `PROTECTED_BRANCHES` there
+- New teammates run `bash scripts/setup.sh` after cloning
 - Files over 500 lines trigger a warning — extract logic into modules
-<!-- TODO: Add your project-specific gotchas below -->
+
+## Active Gotchas
+
+<!-- Add things that tripped you up. Claude reads this every session to avoid repeating mistakes. -->
+<!-- Example entries:
+- **Tab bar clips content** — Always add bottom padding of 88px for elements near screen bottom
+- **API timeouts** — The /generate endpoint needs 180s timeout, not the default 30s
+- **Import order matters** — Firebase must initialize before any auth calls
+-->
+None yet — add entries as you discover them.
 
 ## Custom Skills
 
@@ -131,5 +174,15 @@ TODO
 | `/retro` | Post-session retrospective (4 agents) |
 | `/future-feature` | Feature extraction & backlog management |
 | `/ready-to-commit` | Smart commit preparation with skill chaining |
-| `/learn` | Interactive codebase tutor (Socratic method) |
+| `/learn` | Interactive codebase tutor + courses + achievements |
 | `/vibes` | Daily motivation & focus helper |
+| `/security-check` | Security audit with scorecard tracking |
+| `/impact-analysis` | Change blast radius analyzer |
+| `/test-gen` | Test gap analyzer + generator |
+| `/session-log` | Save session summary to persistent memory |
+| `/async-audit` | Async safety audit (focused or deep mode) |
+| `/validate` | Project validation framework |
+| `/optimize-review` | 7-domain optimization audit with scored report |
+| `/achievements` | Badge progress tracker |
+| `/plan` | Break down features into clear steps before building |
+| `/double-double` | Dual worktree dev sessions with parallel terminals + simulators/browser |
