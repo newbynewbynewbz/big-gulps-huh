@@ -24,5 +24,23 @@
       "Grep",
       "WebSearch"
     ]
+  },
+  "disabledMcpServers": [
+    "claude-in-chrome",
+    "frontend-design@claude-plugins-official"
+  ],
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash $HOME/.claude/scripts/hooks/check-skill-format.sh",
+            "timeout": 5000
+          }
+        ]
+      }
+    ]
   }
 }

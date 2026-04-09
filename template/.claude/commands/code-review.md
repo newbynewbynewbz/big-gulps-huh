@@ -6,6 +6,17 @@ model-hint: sonnet
 
 # Code Review (Smart Router)
 
+## Step 0: Check Audit Cache
+
+Read `.claude/.audit-state.json` if it exists. If entry `"code-review"` exists:
+- Compare fingerprint against current `git diff` hash
+- If match AND timestamp < 60 minutes → skip review, report cached result
+- Otherwise proceed with fresh review
+
+After completing, update cache:
+1. Compute fingerprint from reviewed files
+2. Upsert `"code-review"` entry with status and timestamp
+
 ## Step 1: Detect Scope
 
 Count files changed since last commit (or since branch diverged from main):
@@ -23,11 +34,11 @@ Review directly in a single pass. Check each file for:
 - Missing error handling at system boundaries
 - Race conditions in async code
 
-**Security:**
-- User input validation
-- SQL/command injection vectors
-- Hardcoded secrets or credentials
-- Unsafe deserialization
+**Security (prioritize these for all experience levels):**
+- Hardcoded secrets, API keys, or credentials in source code
+- User input passed directly to SQL queries, shell commands, or HTML output
+- Missing authentication/authorization checks on sensitive operations
+- Sensitive data logged or exposed in error messages
 
 **Performance:**
 - Unnecessary re-renders or recomputation
@@ -59,6 +70,10 @@ Spawn 3 parallel Sonnet agents, each reviewing a subset of files:
 - Naming conventions
 - Type safety
 - Test coverage gaps
+
+## Confidence Filter
+
+Only report issues you are **>80% confident** about. If you're not sure whether something is actually a bug or just an unusual pattern, skip it. False positives erode trust in the review.
 
 ## Step 3: Synthesize
 

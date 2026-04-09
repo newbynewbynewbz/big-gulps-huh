@@ -1,0 +1,5 @@
+- Read files before editing — never guess at existing code
+- Ask before implementing when requirements are ambiguous
+- Keep files under 500 lines — extract logic into modules when they grow
+- Prefer editing existing files over creating new ones
+- Don't add features or refactor beyond what was asked

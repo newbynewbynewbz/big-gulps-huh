@@ -1,0 +1,4 @@
+- Never edit .env files or commit secrets/credentials
+- Always work on feature branches — never commit directly to main
+- Run verification (type checker, tests) after making changes
+- Validate all user inputs at system boundaries

@@ -38,22 +38,14 @@ Never guess on architecture decisions. A 30-second question saves a 30-minute re
 
 | Skill | Model | Reason |
 |-------|-------|--------|
-| `/health` | haiku | Simple file scanning |
 | `/preflight` | haiku | Sequential checks |
 | `/code-review` | sonnet | Multi-agent review |
-| `/deep-review` | sonnet | 5-agent analysis |
-| `/retro` | sonnet | 4-agent retrospective |
 | `/ready-to-commit` | sonnet | Skill chaining |
-| `/plan` | sonnet | Structured planning |
 | `/learn` | opus | Complex teaching |
 | `/vibes` | sonnet | Content generation |
 | `/security-check` | sonnet | Security scanning |
 | `/impact-analysis` | sonnet | Dependency analysis |
 | `/test-gen` | sonnet | Test generation |
-| `/session-log` | sonnet | Session summarization |
-| `/async-audit` | sonnet | Async pattern analysis |
-| `/validate` | sonnet | Multi-check validation |
-| `/optimize-review` | sonnet | 4-agent optimization |
 | `/achievements` | haiku | State checking |
 | `/double-double` | opus | Complex orchestration |
 
@@ -63,13 +55,8 @@ Never guess on architecture decisions. A 30-second question saves a 30-minute re
 |------|------|---------|--------------|
 | .env blocker | Blocking | PreToolUse (Edit/Write) | Prevents editing .env files |
 | Console sentinel | Warning | PostToolUse (Edit/Write) | Warns on debug print statements |
-| Type assertion detector | Warning | PostToolUse (Edit/Write) | Warns on type safety bypasses |
-| Async safety | Warning | PostToolUse (Edit/Write) | Warns on unguarded promises |
+| Type assertion detector | Warning | PostToolUse (Edit/Write) | Warns on `as any` bypasses (TS/JS only) |
 | File size | Warning | PostToolUse (Edit/Write) | Warns on 500+ line files |
-| Session greeting | Info | SessionStart | Shows branch + uncommitted count |
-| Theme tokens | Warning | PostToolUse (Edit/Write) | Warns on hardcoded colors/spacing |
-| Type regression | Warning | PostToolUse (Edit/Write) | Alerts if TypeScript error count increases |
-| Related files | Warning | PostToolUse (Edit/Write) | Reminds about related files to update |
 | Session load | Info | SessionStart | Loads last session context on startup |
 | Session save | Info | Stop | Auto-saves session context when conversation ends |
 | Pre-compact save | Info | PreCompact | Saves state before context compaction |
@@ -167,22 +154,13 @@ None yet — add entries as you discover them.
 
 | Skill | What It Does |
 |-------|-------------|
-| `/health` | Full project health report (types, tests, deps, TODOs, file sizes) |
+| `/learn` | (plugin) Interactive codebase tutor + courses + achievements |
+| `/achievements` | (plugin) Badge progress tracker |
 | `/preflight` | Pre-push verification checks |
-| `/code-review` | Multi-agent code review (routes by file count) |
-| `/deep-review` | 5-agent parallel deep review |
-| `/retro` | Post-session retrospective (4 agents) |
-| `/future-feature` | Feature extraction & backlog management |
 | `/ready-to-commit` | Smart commit preparation with skill chaining |
-| `/learn` | Interactive codebase tutor + courses + achievements |
-| `/vibes` | Daily motivation & focus helper |
+| `/code-review` | Multi-agent code review (routes by file count) |
 | `/security-check` | Security audit with scorecard tracking |
 | `/impact-analysis` | Change blast radius analyzer |
 | `/test-gen` | Test gap analyzer + generator |
-| `/session-log` | Save session summary to persistent memory |
-| `/async-audit` | Async safety audit (focused or deep mode) |
-| `/validate` | Project validation framework |
-| `/optimize-review` | 7-domain optimization audit with scored report |
-| `/achievements` | Badge progress tracker |
-| `/plan` | Break down features into clear steps before building |
+| `/vibes` | Daily motivation & focus helper |
 | `/double-double` | Dual worktree dev sessions with parallel terminals + simulators/browser |

@@ -2,39 +2,55 @@
 
 > **First time here?** Read [START-HERE.md](START-HERE.md) — it walks you through everything in 10 minutes.
 
-Complete Claude Code collaboration setup. One command. Everything you need to start building safely.
+A Claude Code learner plugin. Interactive courses, gamified achievements, and a one-command setup wizard for people new to Claude Code.
 
 Built for friends, family, and anyone joining a project (or starting their own) who wants guardrails, good habits, and a learning path from day one.
 
-## What This Does
+## What It Is
 
-Run `/big-gulps-huh` and it sets up 6 layers:
+Big Gulps Huh is a [Claude Code plugin](https://docs.anthropic.com/en/docs/claude-code/plugins). Install it once, and you get:
 
-1. **Git protection** — [git-shit](https://github.com/newbynewbynewbz/git-shit) hooks: secret scanning, conventional commits, PR workflow, branch protection, and smart git config
-2. **Claude Code hooks** — safety checks that run automatically (blocks .env edits, warns on debug statements, type bypasses, big files, hardcoded colors, type regressions, related file changes)
-3. **Check scripts** — shell scripts that power the hooks (8+ language-aware checks)
-4. **18 skills + 5 courses** — portable tools and built-in lessons
-5. **Learning & achievements** — badge tracking, progress state, audit caching
+- **`/learn`** — an interactive tutor with 6 built-in courses and predict-then-reveal pedagogy
+- **`/achievements`** — a gamified badge tracker for building good habits
+- **`/big-gulps-huh`** — a one-shot setup wizard that scaffolds git protection, safety hooks, 8 focused skills, and the full course library into any project
+
+The plugin asks your experience level first and adjusts how much it explains along the way.
+
+## What the Setup Wizard Installs
+
+Running `/big-gulps-huh` in a target project sets up 6 layers:
+
+1. **Git protection** — bundled [git-shit](https://github.com/newbynewbynewbz/git-shit) hooks: secret scanning, conventional commits, PR workflow, branch protection, and smart git config
+2. **Claude Code hooks** — safety checks that run automatically (debug statement warnings, `as any` detector, file-size warnings, session save/load)
+3. **Check scripts** — shell scripts that power the hooks
+4. **Project skills** — 8 scaffolded skills (preflight, ready-to-commit, code-review, security-check, impact-analysis, test-gen, vibes, double-double)
+5. **Courses & achievements** — 6 interactive courses, learning progress tracking, audit caching
 6. **Documentation** — CLAUDE.md project config + onboarding guide
 
-It asks your experience level first and adjusts how much it explains along the way.
+`/learn` and `/achievements` come from the plugin itself and work as soon as you install it — no scaffolding required.
 
 ## Quick Start
 
-```bash
-# Copy the skill file into your project
-mkdir -p YOUR_PROJECT/.claude/commands
-cp .claude/commands/big-gulps-huh.md YOUR_PROJECT/.claude/commands/
+Big Gulps Huh is its own single-plugin marketplace. Add the marketplace, then install:
 
-# Open Claude Code in your project
+```bash
+# Open Claude Code in any project
 cd YOUR_PROJECT
 claude
 
-# Run it
+# Add the Big Gulps Huh marketplace (once per machine)
+/plugin marketplace add /path/to/big-gulps-huh
+
+# Install the plugin
+/plugin install big-gulps-huh@big-gulps-huh
+
+# Run the setup wizard
 /big-gulps-huh
 ```
 
-That's it. It handles the rest.
+That's it. The wizard handles the rest.
+
+> The `@big-gulps-huh` suffix on `/plugin install` is the marketplace name — the plugin and the marketplace happen to share a name here, which is fine.
 
 ## What You Get
 
@@ -52,39 +68,29 @@ your-project/
     git-shit-tools.sh          <- Optional tool recommendations
   .claude/
     commands/
-      health.md                 <- Project health report
       preflight.md              <- Pre-push checks
-      code-review.md            <- Multi-agent code review
-      deep-review.md            <- 5-agent deep review
-      retro.md                  <- Session retrospective
-      future-feature.md         <- Feature backlog
       ready-to-commit.md        <- Smart commit prep
-      learn.md                  <- Interactive tutor + courses
-      vibes.md                  <- Focus priming
+      code-review.md            <- Multi-agent code review
       security-check.md         <- Security audit
       impact-analysis.md        <- Change blast radius
       test-gen.md               <- Test generator
-      session-log.md            <- Session persistence
-      async-audit.md            <- Async safety audit
-      validate.md               <- Project validation
-      optimize-review.md        <- Optimization audit
-      achievements.md           <- Badge tracker
+      vibes.md                  <- Focus priming
       double-double.md          <- Dual worktree dev sessions
+    rules/
+      safety.md                 <- Core safety rules
+      workflow.md               <- Coding discipline rules
     settings.local.json         <- Hooks + permissions
     learning-state.json         <- Learning progress
     achievements.json           <- Badge tracking
-    related-files.json          <- File dependency map
     .audit-state.json           <- Audit cache
   scripts/
     check-console-log.sh        <- Debug statement detector
     check-as-any.sh             <- Type assertion detector
-    check-async-safety.sh       <- Unguarded promise detector
     check-file-size.sh          <- Large file detector
-    check-theme-tokens.sh       <- Hardcoded color detector
-    check-type-regression.sh    <- Type error tracker
-    check-related-files.sh      <- Related file reminder
-    double-double-open.sh       <- Dual session launcher
-    double-double-close.sh      <- Dual session teardown
+    session-load.sh             <- Session state loader
+    session-save.sh             <- Session state saver
+    pre-compact-save.sh         <- Pre-compaction state saver
+    suggest-compact.sh          <- Compact nudge
     hooks-manifest.json         <- Hook configuration
   docs/
     BIG_GULPS_GUIDE.md          <- Onboarding guide
@@ -94,6 +100,7 @@ your-project/
       git-fundamentals/         <- Course: version control
       security-basics/          <- Course: security fundamentals
       code-review-culture/      <- Course: code review practices
+      working-smart/            <- Course: working effectively with AI
   CLAUDE.md                     <- Project config (fill in TODOs)
   .gitattributes                <- Binary + lock file handling
   .gitshitrc                    <- Git hook config (modes, protected branches)
@@ -104,30 +111,25 @@ your-project/
 
 ## The Skills
 
-| Skill | What It Does | Pack |
-|-------|-------------|------|
-| `/health` | Full project health report — types, tests, deps, TODOs, file sizes | Core |
-| `/preflight` | Pre-push verification — run before every push | Core |
-| `/ready-to-commit` | Smart commit prep — categorizes, reviews, commits | Core |
-| `/learn` | Interactive tutor with built-in courses + achievements | Core |
-| `/vibes` | Research-backed focus & motivation priming | Core |
-| `/code-review` | Multi-agent code review — routes by file count | Reviews |
-| `/deep-review` | 5-agent parallel deep review — for significant changes | Reviews |
-| `/optimize-review` | 7-domain optimization audit with scored report | Reviews |
-| `/security-check` | Security audit with scorecard tracking | Quality |
-| `/impact-analysis` | Change blast radius analyzer | Quality |
-| `/test-gen` | Test gap analyzer + generator | Quality |
-| `/async-audit` | Async safety audit (focused or deep mode) | Quality |
-| `/retro` | Post-session retrospective — captures lessons learned | Workflow |
-| `/future-feature` | Feature extraction & prioritization from docs/feedback | Workflow |
-| `/session-log` | Save session summary to persistent memory | Workflow |
-| `/validate` | Project validation framework | Workflow |
-| `/achievements` | Badge progress tracker | Workflow |
-| `/double-double` | Dual worktree dev sessions with parallel terminals + simulators/browser | Workflow |
+| Skill | What It Does | Scope |
+|-------|-------------|-------|
+| `/learn` | Interactive tutor with built-in courses + achievements | Plugin (global) |
+| `/achievements` | Badge progress tracker | Plugin (global) |
+| `/big-gulps-huh` | One-shot setup wizard (6-phase cascade) | Plugin (global) |
+| `/preflight` | Pre-push verification — run before every push | Project (scaffolded) |
+| `/ready-to-commit` | Smart commit prep — categorizes, reviews, commits | Project (scaffolded) |
+| `/code-review` | Multi-agent code review — routes by file count | Project (scaffolded) |
+| `/security-check` | Security audit with scorecard tracking | Project (scaffolded) |
+| `/impact-analysis` | Change blast radius analyzer | Project (scaffolded) |
+| `/test-gen` | Test gap analyzer + generator | Project (scaffolded) |
+| `/vibes` | Research-backed focus & motivation priming | Project (scaffolded) |
+| `/double-double` | Dual worktree dev sessions with parallel terminals | Project (scaffolded) |
+
+> **Refocus note (April 2026):** Big Gulps Huh was originally a "scaffolder with 19 skills." It's been refocused into a lean learner plugin. Nine skills from earlier versions (`/health`, `/deep-review`, `/optimize-review`, `/async-audit`, `/retro`, `/future-feature`, `/session-log`, `/validate`, `/plan`) have been retired in favor of native Claude Code features, official plugins (`superpowers`, `code-review`, `hookify`, `commit-commands`), and workspace-level commands.
 
 ## The Courses
 
-`/learn` ships with 5 built-in courses designed for people starting from zero:
+`/learn` ships with 6 built-in courses designed for people starting from zero:
 
 | Course | What You'll Learn | Prerequisite |
 |--------|------------------|-------------|
@@ -136,6 +138,7 @@ your-project/
 | **Git Fundamentals** | Branches, commits, PRs, recovery | Terminal Basics |
 | **Security Basics** | Auth, secrets, API keys, data protection | Claude Code Basics |
 | **Code Review Culture** | Reviewing code, giving feedback, accepting feedback | Terminal Basics |
+| **Working Smart with AI** | Context, compaction, planning, commit messages | Claude Code Basics |
 
 Courses use a predict-then-reveal teaching method with hands-on exercises. Progress is tracked across sessions via `.claude/learning-state.json`.
 
@@ -153,7 +156,7 @@ Courses are just markdown files in `docs/courses/your-topic/course.md`. Drop one
 
 Work tracked via `.claude/achievements.json`:
 
-- **Badges** — Earned through milestones (first commit, 10 commits, all tests passing, security audit passed, etc.)
+- **Badges** — Earned through milestones (first commit, 10 commits, test contributor, blast-radius scout, course marathoner, etc.)
 - **Streak tracking** — Consecutive days of commits
 - **Skill usage stats** — Which skills you use most
 - **Findings fixed** — Issues resolved through audits
@@ -166,7 +169,7 @@ Review skills cache results via `.claude/.audit-state.json`:
 
 - **60-minute TTL** — Results cached to avoid redundant checks
 - **Up to 10 entries** — Recent audits stored for trend analysis
-- **Enables fast retros** — `/retro` can reference recent findings without re-running full audits
+- **Enables skill chaining** — `/ready-to-commit` references recent findings from `/code-review` and `/preflight` without re-running them
 
 ## Learning State Tracking
 
@@ -182,7 +185,7 @@ Enables personalized recommendations and adaptive learning paths.
 
 ## For Experienced Devs
 
-Big Gulps uses [git-shit](https://github.com/newbynewbynewbz/git-shit) for git protection — 6 hooks, secret scanning, conventional commits, and 15 git config settings. If you just want git hooks without the Claude Code setup, install git-shit directly.
+Big Gulps uses [git-shit](https://github.com/newbynewbynewbz/git-shit) for git protection — 6 hooks, secret scanning, conventional commits, and 15 git config settings. If you just want git hooks without the learner plugin, install git-shit directly.
 
 ## Why This Exists
 

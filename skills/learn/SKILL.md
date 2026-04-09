@@ -1,7 +1,7 @@
 ---
 name: learn
 description: Interactive tutor — built-in courses (Claude Code, Terminal, Git) + codebase exploration. Start here if you're new.
-argument: "[topic|quiz|progress|contribute]"
+argument: "[topic|quiz|progress|contribute|achievements]"
 model-hint: opus
 ---
 
@@ -18,16 +18,26 @@ An interactive tutor that teaches through Socratic questioning and hands-on expl
 | `quiz` | Quick quiz on previously covered material |
 | `progress` | Show learning progress across all courses/topics |
 | `contribute` | Guide for creating a new course pack |
+| `achievements` | Show badge progress dashboard |
 
 ## Step 1: Discover Available Content
 
 ### Built-in Courses
-Scan `docs/courses/` for directories containing `course.md`. Read the YAML frontmatter of each to get name, description, difficulty, and prerequisites.
+
+Course discovery uses a two-stage lookup so `/learn` works in any project — scaffolded or not:
+
+1. **Scaffolded projects (preferred):** Scan `docs/courses/` in the current project for directories containing `course.md`. If found, use these — they may have been edited or extended after scaffolding.
+2. **Non-scaffolded projects (fallback):** If `docs/courses/` doesn't exist or is empty, fall back to the plugin's built-in curriculum at `${CLAUDE_PLUGIN_ROOT}/template/docs/courses/`. When using the fallback, tell the user: "You're seeing the curated curriculum — run `/big-gulps-huh` if you want these copied into your project so you can edit them."
+
+Read the YAML frontmatter of each `course.md` to get name, description, difficulty, and prerequisites.
 
 Expected built-in courses:
 1. Claude Code Basics (no prerequisites)
 2. Terminal Basics (prerequisite: claude-code-basics)
 3. Git Fundamentals (prerequisite: terminal-basics)
+4. Security Basics (prerequisite: claude-code-basics)
+5. Code Review Culture (prerequisite: claude-code-basics)
+6. Working Smart with AI (prerequisite: claude-code-basics)
 
 ### Project Topics (Dynamic)
 Count source files (exclude node_modules, .git, docs, scripts, .claude):
@@ -42,7 +52,7 @@ find . -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.py" -o -name "*.go" 
 | 20+ | Analyze project structure. Identify 3-5 major areas (by directory grouping, imports, or module boundaries). Add as topics. |
 
 ### Check Progress
-For each course/topic, check for `docs/courses/<name>/progress.json`. Show completion status:
+For each course/topic, check for `.claude/big-gulps-huh-progress/<name>.json` (plugin-owned per-project state — not scaffolded, auto-created on first write). Show completion status:
 - Not started
 - In progress (N/M sessions)
 - Completed
@@ -72,6 +82,7 @@ Use AskUserQuestion with course names as options.
 ### If `quiz` argument: Skip to Step 6.
 ### If `progress` argument: Skip to Step 7.
 ### If `contribute` argument: Skip to Step 8.
+### If `achievements` argument: Run `/achievements`.
 ### If topic name provided: Skip to Step 3 with that topic.
 
 ## Step 3: Session Setup
@@ -99,7 +110,7 @@ Pick your mentor style for this session:
      "What would happen if we chose differently?"
 ```
 
-Load existing progress from `docs/courses/<topic>/progress.json` if it exists. Resume from where they left off.
+Load existing progress from `.claude/big-gulps-huh-progress/<topic>.json` if it exists. Resume from where they left off.
 
 ## Step 4: Teaching Session (3-5 Rounds)
 
@@ -122,6 +133,43 @@ Use the predict-then-reveal method with actual project code:
 - Correct predictions → increase difficulty (more complex code, deeper concepts)
 - Incorrect predictions → simplify (break down further, more context)
 
+### Adaptive Learning
+
+Read `.claude/learning-state.json` to personalize. If the file doesn't exist (the user hasn't run `/big-gulps-huh` yet), create it with the default shape:
+
+```json
+{
+  "version": 1,
+  "experience_level": "unknown",
+  "courses_completed": [],
+  "courses_in_progress": {},
+  "skills_used": {},
+  "common_mistakes": [],
+  "streak_days": 0,
+  "last_session": null
+}
+```
+
+Then personalize:
+- If `common_mistakes` includes patterns relevant to current topic, emphasize those areas
+- If quiz accuracy for this topic is > 90%, offer to skip ahead
+- If quiz accuracy is < 60%, slow down and add more examples
+- Track `skills_used` to suggest hands-on exercises with skills the user hasn't tried
+
+Update `.claude/learning-state.json` after each session:
+```json
+{
+  "version": 1,
+  "experience_level": "some",
+  "courses_completed": ["claude-code-basics"],
+  "courses_in_progress": { "git-fundamentals": { "module": 2, "score": 85 } },
+  "skills_used": { "health": 12, "preflight": 8, "code-review": 3 },
+  "common_mistakes": ["console-log-left-in", "missing-catch"],
+  "streak_days": 5,
+  "last_session": "2026-03-08"
+}
+```
+
 ### Mentor Voice
 Adapt presentation style to the chosen mentor:
 - **Professor:** Structured explanations, analogies, "the reason this matters is..."
@@ -136,7 +184,7 @@ After 3-5 rounds:
 
 2. **Key takeaways** — 3-5 bullet points summarizing what was learned.
 
-3. **Update progress** — Write `docs/courses/<topic>/progress.json`:
+3. **Update progress** — Write `.claude/big-gulps-huh-progress/<topic>.json` (mkdir -p the directory on first write — it's plugin-owned per-project state, not scaffolded):
 ```json
 {
   "topic": "claude-code-basics",
@@ -151,6 +199,11 @@ After 3-5 rounds:
   "mentor": "professor"
 }
 ```
+
+3b. **Update learning state** — Write `.claude/learning-state.json`:
+- Update `courses_in_progress` or `courses_completed`
+- Update `skills_used` if any skills were demonstrated
+- Track accuracy in `common_mistakes` if incorrect predictions were about common issues
 
 4. **Suggest next** — Based on what was learned, suggest the next course or topic.
 

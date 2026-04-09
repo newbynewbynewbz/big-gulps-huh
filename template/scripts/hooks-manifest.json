@@ -1,0 +1,51 @@
+{
+  "check-console-log.sh": {
+    "description": "Warns on debug print statements in production code",
+    "languages": ["ts", "js", "py", "go"],
+    "blocking": false,
+    "trigger": "PostToolUse",
+    "matcher": "Edit|Write"
+  },
+  "check-as-any.sh": {
+    "description": "Warns on type safety bypasses (as any)",
+    "languages": ["ts", "js"],
+    "blocking": false,
+    "trigger": "PostToolUse",
+    "matcher": "Edit|Write"
+  },
+  "check-file-size.sh": {
+    "description": "Warns on files over 500 lines",
+    "languages": ["all"],
+    "blocking": false,
+    "trigger": "PostToolUse",
+    "matcher": "Edit|Write"
+  },
+  "session-load.sh": {
+    "description": "Loads last session context on startup",
+    "languages": ["all"],
+    "blocking": false,
+    "trigger": "SessionStart",
+    "matcher": null
+  },
+  "session-save.sh": {
+    "description": "Auto-saves session context when conversation ends",
+    "languages": ["all"],
+    "blocking": false,
+    "trigger": "Stop",
+    "matcher": null
+  },
+  "pre-compact-save.sh": {
+    "description": "Saves session state before context compaction",
+    "languages": ["all"],
+    "blocking": false,
+    "trigger": "PreCompact",
+    "matcher": null
+  },
+  "suggest-compact.sh": {
+    "description": "Nudges compaction after 40+ tool calls to prevent context overflow",
+    "languages": ["all"],
+    "blocking": false,
+    "trigger": "PreToolUse",
+    "matcher": "Edit|Write"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "src/types/*.ts": ["src/validation/*.ts", "src/helpers/*.ts"],
+  "src/store/*.ts": ["__tests__/store/*.test.ts"],
+  "src/stores/*.ts": ["__tests__/stores/*.test.ts"],
+  ".env.example": ["docs/ENV_VARS.md", "README.md"]
+}

@@ -10,7 +10,12 @@ Someone sent you this because they want to build with you. You don't need to kno
 
 An AI-powered workspace where you describe what you want and Claude builds it. You think, you direct, you decide — Claude writes the code. It's like having a senior developer who never sleeps, never judges your questions, and actually listens.
 
-You'll also get guardrails so you can't accidentally break things, and built-in lessons for when you want to peek under the hood.
+You'll also get:
+- **Guardrails** so you can't accidentally break things
+- **8 portable skills** for code review, security, testing, and more
+- **6 built-in courses** that teach you interactively (Claude Code, terminal, git, security, code review, working smart with AI)
+- **Achievement system** that tracks your progress and badges earned
+- **Learning paths** that adapt based on your experience level
 
 ---
 
@@ -32,25 +37,29 @@ A window with a blinking cursor appears. That's it. You're in.
 
 ---
 
-## Step 3: Go to this folder
+## Step 3: Install the Big Gulps Huh plugin
 
-Type this and press Enter:
+First, find the folder you downloaded. If it's on your desktop it's probably at `~/Desktop/big-gulps-huh` — remember wherever it is, you'll paste that path in a moment.
 
-    cd ~/Desktop/big-gulps-huh
-
-(If you put this folder somewhere else, use that path instead. Ask Claude if you're not sure — seriously, it helps with this stuff too.)
-
----
-
-## Step 4: Start Claude Code
+Open a terminal in any folder (the plugin is global once installed — you don't have to be "inside" it). Then start Claude Code:
 
     claude
 
-You'll see a prompt where you can type messages. This is Claude. Say hi if you want. It won't judge.
+Once Claude is running, add the Big Gulps Huh marketplace, then install the plugin:
+
+    /plugin marketplace add ~/Desktop/big-gulps-huh
+
+    /plugin install big-gulps-huh@big-gulps-huh
+
+(Replace `~/Desktop/big-gulps-huh` with the actual path if you downloaded it somewhere else. The `@big-gulps-huh` suffix on the install command is the marketplace name — it happens to match the plugin name, which is fine.)
+
+You only need to add the marketplace once per machine. After that, `/plugin install big-gulps-huh@big-gulps-huh` works from anywhere.
 
 ---
 
-## Step 5: Create your project
+## Step 4: Create your project
+
+From inside Claude:
 
     /big-gulps-huh new my-first-project
 
