@@ -37,24 +37,24 @@ Notice how Claude reads real files and runs real commands — it's not guessing.
 ### Concept: What Are Skills?
 Skills are pre-written instructions that tell Claude HOW to do something specific. Instead of explaining what you want every time, you type a slash command.
 
-**Predict:** What do you think happens when you type `/health`?
+**Predict:** What do you think happens when you type `/preflight`?
 
-**Reveal:** `/health` runs 6 checks on your project in parallel — types, tests, dependencies, TODOs, file sizes, and code stats — then gives you a report card. Without the skill, you'd have to ask Claude to do each of those things separately.
+**Reveal:** `/preflight` runs all the checks you'd normally do before pushing code — type checker, tests, debug statements, lint, large files — in one pass, and tells you whether you're safe to push. Without the skill, you'd have to ask Claude to do each of those things separately.
 
 **Think of skills like recipes.** You could describe how to make a sandwich every time, or you could just say "make me a sandwich" and the recipe handles the details.
 
 ### Concept: Your Available Skills
 | Skill | What It Does | When to Use It |
 |-------|-------------|----------------|
-| `/health` | Project health report | "Is everything working?" |
+| `/learn` | This! Interactive tutor with courses | Anytime you want to learn |
+| `/achievements` | Badge progress tracker | Check what you've unlocked |
 | `/preflight` | Pre-push checks | Before pushing code |
+| `/ready-to-commit` | Smart commit prep | When you're ready to commit |
 | `/code-review` | AI code review | Before making a PR |
-| `/learn` | This! Interactive tutor | Anytime you want to learn |
 | `/vibes` | Focus & motivation | Start of a session |
-| `/retro` | Session retrospective | End of a session |
 
 ### Exercise: Try a Skill
-Run `/health` right now. Read the output. Then ask Claude: "What does the grade mean?"
+Run `/preflight quick` right now. Read the output. Then ask Claude: "What does each check mean?"
 
 ## Module 3: CLAUDE.md — The Project Constitution
 

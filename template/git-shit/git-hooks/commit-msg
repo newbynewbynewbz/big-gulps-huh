@@ -38,7 +38,7 @@ if echo "$MSG" | grep -qE '^(fixup|squash)! '; then
 fi
 
 # Check for conventional commit prefix
-if echo "$MSG" | grep -qE '^(feat|fix|refactor|docs|test|chore|style|perf|ci|build|revert)(\([a-zA-Z0-9_-]+\))?!?: .+'; then
+if echo "$MSG" | grep -qE '^(feat|fix|refactor|docs|test|chore|style|perf|ci|build|revert|research)(\([a-zA-Z0-9_-]+\))?!?: .+'; then
   exit 0
 fi
 
@@ -54,7 +54,7 @@ echo "  Your message:  $MSG"
 echo ""
 echo "  Required format: <type>(<scope>): <description>"
 echo ""
-echo "  Types: feat fix refactor docs test chore style perf ci build revert"
+echo "  Types: feat fix refactor docs test chore style perf ci build revert research"
 echo "  Scope: optional — e.g., feat(auth): or fix(api):"
 echo ""
 echo "  Examples:"

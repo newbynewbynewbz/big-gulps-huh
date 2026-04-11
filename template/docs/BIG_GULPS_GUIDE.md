@@ -44,17 +44,17 @@ The `.env` blocker hook will physically prevent it. Credentials in AI chat histo
 
 | Skill | What It Does | When to Use It |
 |-------|-------------|----------------|
-| `/health` | Runs types, tests, deps, TODOs, file sizes | "Is everything still working?" |
+| `/learn` | Interactive tutor with built-in courses | Start here — learn by doing |
+| `/achievements` | Badge progress tracker | Check what you've unlocked |
 | `/preflight` | Pre-push verification suite | Before every push. Every. Single. One. |
-| `/code-review` | Multi-agent code review | After finishing a feature, before PR |
-| `/deep-review` | 5-agent parallel deep review | For important changes or new architecture |
-| `/retro` | Post-session retrospective | End of a work session — captures lessons |
-| `/future-feature` | Extract & prioritize feature ideas | After reviews, user feedback, brainstorms |
 | `/ready-to-commit` | Smart commit prep with category detection | When you're ready to commit (duh) |
-| `/learn` | Interactive codebase tutor | When you're new or exploring unfamiliar code |
+| `/code-review` | Multi-agent code review | After finishing a feature, before PR |
+| `/security-check` | Security audit with scorecard | Before shipping anything that touches auth or data |
+| `/impact-analysis` | Change blast radius analyzer | Before editing a shared file, type, or store |
+| `/test-gen` | Test gap analyzer + generator | When coverage feels thin |
 | `/vibes` | Daily motivation & focus helper | When you need a productivity boost |
 
-**Pro tip:** The minimum viable workflow is `/preflight` before pushing and `/health` when things feel off. Everything else is bonus XP.
+**Pro tip:** The minimum viable workflow is `/learn` to start, `/preflight` before pushing, and `/ready-to-commit` to commit. Everything else is bonus XP.
 
 ---
 
@@ -93,7 +93,7 @@ Think of it as onboarding docs, except the new hire is an AI that reads really f
 1. **Read this guide** *(you're doing it, gold star)*
 2. **Fill in CLAUDE.md TODOs** — Tech Stack, File Structure, Code Patterns at minimum
 3. **Run `bash scripts/setup-hooks.sh`** to verify hooks are installed
-4. **Try `/health`** to see your project's current status
+4. **Try `/learn`** to start your first course
 5. **Make a test branch:** `git checkout -b test/my-first-branch`
 6. **Make a small change and commit:** `git commit -m "test: verify hook setup"`
 7. **Run `/preflight`** before pushing
@@ -133,7 +133,7 @@ This setup is a starting point, not a straitjacket. As your project grows:
 - Add project-specific hooks (design token enforcement, API validation, etc.)
 - Create custom skills for repetitive workflows
 - Update CLAUDE.md as patterns evolve
-- Run `/retro` regularly to capture what you've learned
+- Use `/achievements` to keep momentum and track habits
 
 The goal isn't perfection — it's fewer "oh no" moments and more "oh nice" moments.
 

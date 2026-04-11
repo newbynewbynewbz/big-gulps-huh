@@ -1,0 +1,17 @@
+{
+  "name": "big-gulps-huh",
+  "description": "Claude Code learner plugin — interactive courses, gamified achievements, and a one-command setup wizard for people new to Claude Code",
+  "version": "2.0.0",
+  "author": {
+    "name": "Paul Pecchenino"
+  },
+  "license": "MIT",
+  "keywords": [
+    "learning",
+    "onboarding",
+    "courses",
+    "achievements",
+    "scaffolding",
+    "beginner"
+  ]
+}

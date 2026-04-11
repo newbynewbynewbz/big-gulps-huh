@@ -16,6 +16,15 @@ git diff --name-only
 
 If nothing to commit, say so and stop.
 
+## Step 1.5: Check Audit Cache
+
+If `.claude/.audit-state.json` exists, read it. For each audit entry:
+- Check if the fingerprint still matches current file state
+- Check if the timestamp is within 60 minutes
+- If both match, mark that audit as CACHED (skip re-running)
+
+When routing to `/code-review` in Step 3, pass cache status. If a sub-audit is cached with PASS status, skip it and note "(cached)" in output.
+
 ## Step 2: Categorize Files
 
 Group changed files by category:
@@ -46,7 +55,7 @@ Show the categorized file list to the user.
 ### Large change (16+ files or 4+ categories)
 - Warn: "This looks like it should be multiple commits"
 - Suggest how to split by category
-- If user insists on single commit, run `/deep-review` first
+- If user insists on single commit, run `/code-review` first with all files in scope
 
 ## Step 4: Pre-Commit Chain
 
@@ -61,4 +70,4 @@ Before committing:
 After successful commit:
 - Show `git log --oneline -3` for context
 - Ask: "Push to remote?" — if yes, `git push -u origin $(git branch --show-current)`
-- Suggest: "Run `/retro` to capture lessons from this session"
+- Suggest: "Run `/achievements` to check for new badges"
