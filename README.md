@@ -8,7 +8,7 @@ Built for friends, family, and anyone joining a project (or starting their own) 
 
 ## What It Is
 
-Big Gulps Huh is a [Claude Code plugin](https://docs.anthropic.com/en/docs/claude-code/plugins). Install it once, and you get:
+Big Gulps Huh is a [Claude Code plugin](https://code.claude.com/docs/en/plugins). Install it once, and you get:
 
 - **`/learn`** — an interactive tutor with 6 built-in courses and predict-then-reveal pedagogy
 - **`/achievements`** — a gamified badge tracker for building good habits

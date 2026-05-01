@@ -22,7 +22,7 @@ You'll also get:
 ## Step 1: Install Claude Code
 
 If you haven't already, grab it here:
-https://docs.anthropic.com/en/docs/claude-code/overview
+https://code.claude.com/docs/en/overview
 
 This is the AI that does the building. It lives in your terminal — that's the black window with the blinking cursor that hackers use in movies. Except you're going to use it for real.
 
