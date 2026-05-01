@@ -38,6 +38,7 @@ Expected built-in courses:
 4. Security Basics (prerequisite: claude-code-basics)
 5. Code Review Culture (prerequisite: claude-code-basics)
 6. Working Smart with AI (prerequisite: claude-code-basics)
+7. Extending Claude Code (prerequisite: claude-code-basics)
 
 ### Project Topics (Dynamic)
 Count source files (exclude node_modules, .git, docs, scripts, .claude):
