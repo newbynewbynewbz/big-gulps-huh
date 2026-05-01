@@ -129,7 +129,7 @@ your-project/
 
 ## The Courses
 
-`/learn` ships with 6 built-in courses designed for people starting from zero:
+`/learn` ships with 7 built-in courses designed for people starting from zero:
 
 | Course | What You'll Learn | Prerequisite |
 |--------|------------------|-------------|
@@ -139,6 +139,7 @@ your-project/
 | **Security Basics** | Auth, secrets, API keys, data protection | Claude Code Basics |
 | **Code Review Culture** | Reviewing code, giving feedback, accepting feedback | Terminal Basics |
 | **Working Smart with AI** | Context, compaction, planning, commit messages | Claude Code Basics |
+| **Extending Claude Code** | Subagents, output styles, hooks, MCP servers | Claude Code Basics |
 
 Courses use a predict-then-reveal teaching method with hands-on exercises. Progress is tracked across sessions via `.claude/learning-state.json`.
 
