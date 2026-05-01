@@ -96,6 +96,8 @@ Read the relevant source files. Identify 3-5 teachable concepts in that area (pa
 
 ### Pick a Mentor
 
+The three mentors are real subagents (`agents/mentor-professor.md`, `agents/mentor-practitioner.md`, `agents/mentor-philosopher.md`). Each round of the teaching session dispatches the chosen mentor via the Agent tool — this isolates the mentor's context, lets each pick its own model, and keeps the parent `/learn` invocation in charge of state.
+
 Use AskUserQuestion:
 
 ```
@@ -111,53 +113,69 @@ Pick your mentor style for this session:
      "What would happen if we chose differently?"
 ```
 
+Map the answer to a `subagent_type`:
+- Professor → `mentor-professor`
+- Practitioner → `mentor-practitioner`
+- Philosopher → `mentor-philosopher`
+
 Load existing progress from `.claude/big-gulps-huh-progress/<topic>.json` if it exists. Resume from where they left off.
 
 ## Step 4: Teaching Session (3-5 Rounds)
 
-### For built-in courses:
-Follow the modules in course.md sequentially. Each module has:
-- **Concept** sections with predict-then-reveal prompts
-- **Exercise** sections with hands-on tasks
+Each round is a **single Agent dispatch** to the chosen mentor subagent. The parent `/learn` invocation orchestrates the loop:
 
-Present one concept at a time. Use AskUserQuestion for predictions. Reveal answers, then connect to broader patterns.
+1. **Read adaptive context** — load `.claude/learning-state.json` (create with defaults if missing) and the topic's progress file. Bootstrap default state shape if the file doesn't exist:
 
-### For project topics:
-Use the predict-then-reveal method with actual project code:
-1. **Set up:** Show a code snippet from the project
-2. **Predict:** Ask what they think it does or why it's written this way
-3. **Reveal:** Explain the actual behavior and reasoning
-4. **Connect:** Link to broader patterns in the codebase
-5. **Challenge:** Pose a "what if" variation
+   ```json
+   {
+     "version": 1,
+     "experience_level": "unknown",
+     "courses_completed": [],
+     "courses_in_progress": {},
+     "skills_used": {},
+     "common_mistakes": [],
+     "streak_days": 0,
+     "last_session": null
+   }
+   ```
+
+2. **Dispatch the mentor** for this round using the Agent tool with `subagent_type` set to the chosen mentor. The prompt must include:
+
+   - **Topic + scope:** course module name and concept (or project topic + path), pulled from `course.md` for built-in courses or from project source for project topics
+   - **Position:** which round number this is (1 of 3-5), and which module index within the course
+   - **Prior response:** the user's last prediction and whether it was correct/partial/incorrect (or "first round" if this is round 1)
+   - **Adaptive context:** relevant `common_mistakes`, `experience_level`, accuracy on this topic so far, and any `skills_used` the user has touched
+   - **Difficulty signal:** "increase difficulty" if the prior response was correct, "simplify" if incorrect, "hold" otherwise
+
+   The mentor returns a structured round (Predict / Reveal / Connect or Setup / Predict / Reveal / Try-it or The-choice / Predict / Reveal / But-what-if, depending on which mentor).
+
+3. **Present the round to the user.** Surface the mentor's framed prediction with AskUserQuestion. Capture their response.
+
+4. **Reveal + capture.** Show the mentor's reveal section. Note whether the user's prediction was correct, partial, or incorrect — this becomes the "prior response" input for the next round.
+
+5. **Update state in the parent** (NOT in the mentor — see Critical Constraint below). After each round, append accuracy to in-memory tallies. After the session wraps in Step 5, persist to `.claude/learning-state.json` and `.claude/big-gulps-huh-progress/<topic>.json`.
+
+6. **Decide whether to continue.** Loop back to step 2 for the next round, up to 3-5 rounds total. If the user signals they want to stop, jump to Step 5 (Wrap-Up).
 
 ### Difficulty Scaling
-- Correct predictions → increase difficulty (more complex code, deeper concepts)
-- Incorrect predictions → simplify (break down further, more context)
+
+Pass the difficulty signal in the dispatch prompt; the mentor handles the actual adjustment internally per its own pedagogy. Don't try to second-guess the mentor — that's what the subagent boundary buys you.
+
+- Correct predictions → next dispatch carries `"difficulty": "increase"`
+- Incorrect predictions → next dispatch carries `"difficulty": "simplify"`
+- Partial → `"difficulty": "hold"`
 
 ### Adaptive Learning
 
-Read `.claude/learning-state.json` to personalize. If the file doesn't exist (the user hasn't run `/big-gulps-huh` yet), create it with the default shape:
+Personalize by what you pass into the dispatch:
 
-```json
-{
-  "version": 1,
-  "experience_level": "unknown",
-  "courses_completed": [],
-  "courses_in_progress": {},
-  "skills_used": {},
-  "common_mistakes": [],
-  "streak_days": 0,
-  "last_session": null
-}
-```
+- If `common_mistakes` includes patterns relevant to current topic, surface them as "emphasize: [pattern]" in the dispatch prompt
+- If quiz accuracy for this topic is > 90%, offer to skip ahead before dispatching
+- If quiz accuracy is < 60%, dispatch with `"difficulty": "simplify"` from the first round
+- Track `skills_used` to bias the Practitioner toward hands-on tasks with skills the user hasn't tried
 
-Then personalize:
-- If `common_mistakes` includes patterns relevant to current topic, emphasize those areas
-- If quiz accuracy for this topic is > 90%, offer to skip ahead
-- If quiz accuracy is < 60%, slow down and add more examples
-- Track `skills_used` to suggest hands-on exercises with skills the user hasn't tried
+A typical post-session `.claude/learning-state.json` looks like:
 
-Update `.claude/learning-state.json` after each session:
 ```json
 {
   "version": 1,
@@ -171,11 +189,14 @@ Update `.claude/learning-state.json` after each session:
 }
 ```
 
-### Mentor Voice
-Adapt presentation style to the chosen mentor:
-- **Professor:** Structured explanations, analogies, "the reason this matters is..."
-- **Practitioner:** "Watch what happens when...", debugging scenarios, real examples
-- **Philosopher:** Questions back at them, trade-off exploration, "but what if..."
+### Critical Constraint: State Lives in the Parent
+
+Subagent contexts are isolated. If a mentor wrote to `.claude/learning-state.json` directly, the parent `/learn` invocation wouldn't see it coherently across rounds — state drift between turns. The mentor subagent files explicitly forbid state writes; this skill enforces the other half of the contract: **the parent always owns the writes**.
+
+Concretely:
+- Mentors **read** course files, source files, and progress files for context.
+- Mentors **return** structured round output to the parent.
+- The parent **collects** rounds, tracks accuracy, and persists state in Step 5.
 
 ## Step 5: Wrap-Up
 
